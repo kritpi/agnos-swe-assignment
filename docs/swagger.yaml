@@ -1,0 +1,11 @@
+basePath: /api/v1
+host: localhost:8080
+info:
+  contact: {}
+  description: REST API for the Agnos SWE assignment (Gin + PostgreSQL).
+  title: Agnos SWE Assignment API
+  version: "1.0"
+paths: {}
+schemes:
+- http
+swagger: "2.0"
