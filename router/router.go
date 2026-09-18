@@ -9,10 +9,12 @@ import (
 
 	_ "github.com/kritpi/agnos-swe-assignment/docs" // generated swagger docs
 	"github.com/kritpi/agnos-swe-assignment/handler"
+	"github.com/kritpi/agnos-swe-assignment/middleware"
+	"github.com/kritpi/agnos-swe-assignment/property"
 )
 
 // SetUpRouter registers all routes and the Swagger UI on the Gin engine.
-func SetUpRouter(r *gin.Engine, h handler.Handler) {
+func SetUpRouter(r *gin.Engine, h handler.Handler, cfg *property.Config) {
 	// Swagger UI at /docs/api
 	r.GET("/docs/api", func(c *gin.Context) {
 		c.Redirect(http.StatusMovedPermanently, "/docs/api/index.html")
@@ -35,4 +37,9 @@ func SetUpRouter(r *gin.Engine, h handler.Handler) {
 	}
 
 	// Patient
+	patient := v1.Group("/patient")
+	patient.Use(middleware.RequireStaffLogin(cfg.JWT.Secret))
+	{
+		// patient.POST("/search")
+	}
 }
