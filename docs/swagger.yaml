@@ -14,6 +14,24 @@ definitions:
     - password
     - username
     type: object
+  github_com_kritpi_agnos-swe-assignment_handler_dto.LoginRequest:
+    properties:
+      hospital:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - hospital
+    - password
+    - username
+    type: object
+  github_com_kritpi_agnos-swe-assignment_handler_dto.LoginResponse:
+    properties:
+      access_token:
+        type: string
+    type: object
   github_com_kritpi_agnos-swe-assignment_handler_dto.StaffResponse:
     properties:
       created_at:
@@ -75,6 +93,41 @@ paths:
           schema:
             $ref: '#/definitions/handler.ErrorResponse'
       summary: Create a staff member
+      tags:
+      - staff
+  /staff/login:
+    post:
+      consumes:
+      - application/json
+      description: Checks the staff credentials for the given hospital and returns
+        a JWT access token.
+      parameters:
+      - description: Staff credentials
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_kritpi_agnos-swe-assignment_handler_dto.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_kritpi_agnos-swe-assignment_handler_dto.LoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Log in as a staff member
       tags:
       - staff
 schemes:

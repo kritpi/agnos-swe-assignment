@@ -35,5 +35,5 @@ func (h *handler) StaffCreate(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, dto.NewStaffResponse(*staff))
+	c.JSON(http.StatusCreated, dto.StaffResponse{}.FromDomain(staff))
 }

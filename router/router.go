@@ -31,7 +31,7 @@ func SetUpRouter(r *gin.Engine, h handler.Handler) {
 	staff := v1.Group("/staff")
 	{
 		staff.POST("/create", h.StaffCreate)
-		// staff.POST("/login", h.StaffLogin) — enable once the handler exists.
+		staff.POST("/login", h.StaffLogin) 
 	}
 
 	// Patient

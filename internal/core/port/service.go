@@ -8,4 +8,5 @@ import (
 
 type Service interface {
 	CreateStaff(ctx context.Context, cred domain.StaffCredentials) (*domain.Staff, error)
+	LoginStaff(ctx context.Context, cred domain.StaffCredentials) (*domain.LoginResponse, error)
 }

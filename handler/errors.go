@@ -16,6 +16,7 @@ var errorStatus = []struct {
 	{domain.ErrHospitalNotFound, http.StatusNotFound},
 	{domain.ErrNotFound, http.StatusNotFound},
 	{domain.ErrStaffAlreadyExists, http.StatusConflict},
+	{domain.ErrInvalidCredentials, http.StatusUnauthorized},
 }
 
 func writeError(c *gin.Context, err error) {

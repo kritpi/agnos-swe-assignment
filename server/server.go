@@ -40,7 +40,7 @@ func Run() error {
 
 	repo := repository.New(pool, cfg.DBTable)
 	adapters := adapter.New(cfg)
-	svc := service.New(repo, adapters)
+	svc := service.New(repo, adapters, cfg)
 	h := handler.New(svc)
 
 	r := gin.Default()

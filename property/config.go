@@ -9,12 +9,10 @@ import (
 	"github.com/kelseyhightower/envconfig"
 )
 
-// ServerConfig holds HTTP server settings.
 type ServerConfig struct {
 	Port string `envconfig:"PORT" default:"8080"`
 }
 
-// PostgresConfig holds the PostgreSQL connection settings.
 type PostgresConfig struct {
 	Host     string `envconfig:"DB_HOST" default:"localhost"`
 	Port     string `envconfig:"DB_PORT" default:"5432"`
@@ -24,7 +22,6 @@ type PostgresConfig struct {
 	SSLMode  string `envconfig:"DB_SSLMODE" default:"disable"`
 }
 
-// DSN builds a postgres:// connection URL for pgx.
 func (p PostgresConfig) DSN() string {
 	u := url.URL{
 		Scheme:   "postgres",
@@ -36,8 +33,6 @@ func (p PostgresConfig) DSN() string {
 	return u.String()
 }
 
-// DBTableConfig holds the database table names used by the repository. They
-// must match the tables created by the migrations.
 type DBTableConfig struct {
 	Hospitals        string `envconfig:"DB_TABLE_HOSPITALS" default:"hospitals"`
 	Staffs           string `envconfig:"DB_TABLE_STAFFS" default:"staffs"`
@@ -45,23 +40,25 @@ type DBTableConfig struct {
 	HospitalPatients string `envconfig:"DB_TABLE_HOSPITAL_PATIENTS" default:"hospital_patients"`
 }
 
-// HISHospitalAConfig holds hospital A's information system settings. Each
-// hospital gets its own struct, because each HIS has its own endpoints. URLs
-// are full endpoint URLs; the adapter only appends the path parameter.
 type HISHospitalAConfig struct {
 	HISHospitalASearchPatientURL string        `envconfig:"HIS_HOSPITAL_A_SEARCH_PATIENT_URL"`
 	HISHospitalATimeout          time.Duration `envconfig:"HIS_HOSPITAL_A_TIMEOUT" default:"10s"`
 }
 
-// Config is the aggregated application configuration.
+// JWTConfig holds the settings for signing staff access tokens.
+type JWTConfig struct {
+	Secret string        `envconfig:"JWT_SECRET" required:"true"`
+	TTL    time.Duration `envconfig:"JWT_TTL" default:"24h"`
+}
+
 type Config struct {
 	Server       ServerConfig
 	Postgres     PostgresConfig
 	DBTable      DBTableConfig
+	JWT          JWTConfig
 	HISHospitalA HISHospitalAConfig
 }
 
-// Load reads the .env file (if present) and populates Config from the environment.
 func Load() (*Config, error) {
 	_ = godotenv.Load(".env")
 
@@ -73,6 +70,9 @@ func Load() (*Config, error) {
 		return nil, err
 	}
 	if err := envconfig.Process("", &cfg.DBTable); err != nil {
+		return nil, err
+	}
+	if err := envconfig.Process("", &cfg.JWT); err != nil {
 		return nil, err
 	}
 	if err := envconfig.Process("", &cfg.HISHospitalA); err != nil {
