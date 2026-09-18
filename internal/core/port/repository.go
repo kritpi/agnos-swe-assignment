@@ -1,11 +1,18 @@
 package port
 
-import "context"
+import (
+	"context"
 
-// Repository is the data-access interface. Each method is implemented in its
-// own file under repository/.
+	"github.com/kritpi/agnos-swe-assignment/internal/core/domain"
+)
+
 type Repository interface {
-	// Transactional runs f inside a database transaction. Repository calls made
-	// with the ctx passed to f join that transaction.
 	Transactional(ctx context.Context, f func(ctx context.Context) error) error
+
+	// Hospital
+	FindHospitalByCode(ctx context.Context, code string) (*domain.Hospital, error)
+
+	// Staff
+	FindStaffByUsername(ctx context.Context, hospitalID, username string) (*domain.Staff, error)
+	CreateStaff(ctx context.Context, s domain.Staff) error
 }

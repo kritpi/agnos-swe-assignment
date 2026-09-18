@@ -24,6 +24,15 @@ func SetUpRouter(r *gin.Engine, h handler.Handler) {
 	})
 
 	// Keep in sync with @BasePath in cmd/server/main.go.
-	v1 := r.Group("/api").Group("/v1")
-	_ = v1
+	api := r.Group("/api")
+	v1 := api.Group("/v1")
+
+	// Staff
+	staff := v1.Group("/staff")
+	{
+		staff.POST("/create", h.StaffCreate)
+		// staff.POST("/login", h.StaffLogin) — enable once the handler exists.
+	}
+
+	// Patient
 }

@@ -1,11 +1,82 @@
 basePath: /api/v1
+definitions:
+  github_com_kritpi_agnos-swe-assignment_handler_dto.CreateStaffRequest:
+    properties:
+      hospital:
+        type: string
+      password:
+        minLength: 8
+        type: string
+      username:
+        type: string
+    required:
+    - hospital
+    - password
+    - username
+    type: object
+  github_com_kritpi_agnos-swe-assignment_handler_dto.StaffResponse:
+    properties:
+      created_at:
+        type: string
+      hospital_id:
+        type: string
+      id:
+        type: string
+      username:
+        type: string
+    type: object
+  handler.ErrorResponse:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
   description: REST API for the Agnos SWE assignment (Gin + PostgreSQL).
   title: Agnos SWE Assignment API
   version: "1.0"
-paths: {}
+paths:
+  /staff/create:
+    post:
+      consumes:
+      - application/json
+      description: Creates a staff account for the given hospital.
+      parameters:
+      - description: Staff credentials
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_kritpi_agnos-swe-assignment_handler_dto.CreateStaffRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_kritpi_agnos-swe-assignment_handler_dto.StaffResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Create a staff member
+      tags:
+      - staff
 schemes:
 - http
 swagger: "2.0"

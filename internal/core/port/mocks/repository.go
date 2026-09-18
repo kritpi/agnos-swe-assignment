@@ -5,6 +5,7 @@ package mocks
 import (
 	context "context"
 
+	domain "github.com/kritpi/agnos-swe-assignment/internal/core/domain"
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -19,6 +20,172 @@ type Repository_Expecter struct {
 
 func (_m *Repository) EXPECT() *Repository_Expecter {
 	return &Repository_Expecter{mock: &_m.Mock}
+}
+
+// CreateStaff provides a mock function with given fields: ctx, s
+func (_m *Repository) CreateStaff(ctx context.Context, s domain.Staff) error {
+	ret := _m.Called(ctx, s)
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateStaff")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, domain.Staff) error); ok {
+		r0 = rf(ctx, s)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// Repository_CreateStaff_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateStaff'
+type Repository_CreateStaff_Call struct {
+	*mock.Call
+}
+
+// CreateStaff is a helper method to define mock.On call
+//   - ctx context.Context
+//   - s domain.Staff
+func (_e *Repository_Expecter) CreateStaff(ctx interface{}, s interface{}) *Repository_CreateStaff_Call {
+	return &Repository_CreateStaff_Call{Call: _e.mock.On("CreateStaff", ctx, s)}
+}
+
+func (_c *Repository_CreateStaff_Call) Run(run func(ctx context.Context, s domain.Staff)) *Repository_CreateStaff_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(domain.Staff))
+	})
+	return _c
+}
+
+func (_c *Repository_CreateStaff_Call) Return(_a0 error) *Repository_CreateStaff_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *Repository_CreateStaff_Call) RunAndReturn(run func(context.Context, domain.Staff) error) *Repository_CreateStaff_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// FindHospitalByCode provides a mock function with given fields: ctx, code
+func (_m *Repository) FindHospitalByCode(ctx context.Context, code string) (*domain.Hospital, error) {
+	ret := _m.Called(ctx, code)
+
+	if len(ret) == 0 {
+		panic("no return value specified for FindHospitalByCode")
+	}
+
+	var r0 *domain.Hospital
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, string) (*domain.Hospital, error)); ok {
+		return rf(ctx, code)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, string) *domain.Hospital); ok {
+		r0 = rf(ctx, code)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*domain.Hospital)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, string) error); ok {
+		r1 = rf(ctx, code)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// Repository_FindHospitalByCode_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindHospitalByCode'
+type Repository_FindHospitalByCode_Call struct {
+	*mock.Call
+}
+
+// FindHospitalByCode is a helper method to define mock.On call
+//   - ctx context.Context
+//   - code string
+func (_e *Repository_Expecter) FindHospitalByCode(ctx interface{}, code interface{}) *Repository_FindHospitalByCode_Call {
+	return &Repository_FindHospitalByCode_Call{Call: _e.mock.On("FindHospitalByCode", ctx, code)}
+}
+
+func (_c *Repository_FindHospitalByCode_Call) Run(run func(ctx context.Context, code string)) *Repository_FindHospitalByCode_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(string))
+	})
+	return _c
+}
+
+func (_c *Repository_FindHospitalByCode_Call) Return(_a0 *domain.Hospital, _a1 error) *Repository_FindHospitalByCode_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *Repository_FindHospitalByCode_Call) RunAndReturn(run func(context.Context, string) (*domain.Hospital, error)) *Repository_FindHospitalByCode_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// FindStaffByUsername provides a mock function with given fields: ctx, hospitalID, username
+func (_m *Repository) FindStaffByUsername(ctx context.Context, hospitalID string, username string) (*domain.Staff, error) {
+	ret := _m.Called(ctx, hospitalID, username)
+
+	if len(ret) == 0 {
+		panic("no return value specified for FindStaffByUsername")
+	}
+
+	var r0 *domain.Staff
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, string, string) (*domain.Staff, error)); ok {
+		return rf(ctx, hospitalID, username)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, string, string) *domain.Staff); ok {
+		r0 = rf(ctx, hospitalID, username)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*domain.Staff)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, string, string) error); ok {
+		r1 = rf(ctx, hospitalID, username)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// Repository_FindStaffByUsername_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindStaffByUsername'
+type Repository_FindStaffByUsername_Call struct {
+	*mock.Call
+}
+
+// FindStaffByUsername is a helper method to define mock.On call
+//   - ctx context.Context
+//   - hospitalID string
+//   - username string
+func (_e *Repository_Expecter) FindStaffByUsername(ctx interface{}, hospitalID interface{}, username interface{}) *Repository_FindStaffByUsername_Call {
+	return &Repository_FindStaffByUsername_Call{Call: _e.mock.On("FindStaffByUsername", ctx, hospitalID, username)}
+}
+
+func (_c *Repository_FindStaffByUsername_Call) Run(run func(ctx context.Context, hospitalID string, username string)) *Repository_FindStaffByUsername_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(string), args[2].(string))
+	})
+	return _c
+}
+
+func (_c *Repository_FindStaffByUsername_Call) Return(_a0 *domain.Staff, _a1 error) *Repository_FindStaffByUsername_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *Repository_FindStaffByUsername_Call) RunAndReturn(run func(context.Context, string, string) (*domain.Staff, error)) *Repository_FindStaffByUsername_Call {
+	_c.Call.Return(run)
+	return _c
 }
 
 // Transactional provides a mock function with given fields: ctx, f

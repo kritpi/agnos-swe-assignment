@@ -36,6 +36,15 @@ func (p PostgresConfig) DSN() string {
 	return u.String()
 }
 
+// DBTableConfig holds the database table names used by the repository. They
+// must match the tables created by the migrations.
+type DBTableConfig struct {
+	Hospitals        string `envconfig:"DB_TABLE_HOSPITALS" default:"hospitals"`
+	Staffs           string `envconfig:"DB_TABLE_STAFFS" default:"staffs"`
+	Patients         string `envconfig:"DB_TABLE_PATIENTS" default:"patients"`
+	HospitalPatients string `envconfig:"DB_TABLE_HOSPITAL_PATIENTS" default:"hospital_patients"`
+}
+
 // HISHospitalAConfig holds hospital A's information system settings. Each
 // hospital gets its own struct, because each HIS has its own endpoints. URLs
 // are full endpoint URLs; the adapter only appends the path parameter.
@@ -48,6 +57,7 @@ type HISHospitalAConfig struct {
 type Config struct {
 	Server       ServerConfig
 	Postgres     PostgresConfig
+	DBTable      DBTableConfig
 	HISHospitalA HISHospitalAConfig
 }
 
@@ -60,6 +70,9 @@ func Load() (*Config, error) {
 		return nil, err
 	}
 	if err := envconfig.Process("", &cfg.Postgres); err != nil {
+		return nil, err
+	}
+	if err := envconfig.Process("", &cfg.DBTable); err != nil {
 		return nil, err
 	}
 	if err := envconfig.Process("", &cfg.HISHospitalA); err != nil {

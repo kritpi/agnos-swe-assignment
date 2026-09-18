@@ -38,4 +38,4 @@ docker-down:
 	docker compose down
 
 docker-logs:
-	docker compose logs -f api
+	docker compose logs -f api nginx

@@ -1,6 +1,11 @@
 package port
 
-// Service is the business-logic interface consumed by the handler layer.
-// Each operation is implemented in its own file under internal/core/service.
+import (
+	"context"
+
+	"github.com/kritpi/agnos-swe-assignment/internal/core/domain"
+)
+
 type Service interface {
+	CreateStaff(ctx context.Context, cred domain.StaffCredentials) (*domain.Staff, error)
 }

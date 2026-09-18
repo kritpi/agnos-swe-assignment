@@ -38,7 +38,7 @@ func Run() error {
 		return fmt.Errorf("ping postgres: %w", err)
 	}
 
-	repo := repository.New(pool)
+	repo := repository.New(pool, cfg.DBTable)
 	adapters := adapter.New(cfg)
 	svc := service.New(repo, adapters)
 	h := handler.New(svc)
