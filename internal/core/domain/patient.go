@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"strings"
 	"time"
 
 	"github.com/kritpi/agnos-swe-assignment/enum"
@@ -49,4 +50,41 @@ type PatientSearchCriteria struct {
 	DateOfBirth *time.Time
 	PhoneNumber string
 	Email       string
+}
+
+// IsEmpty reports whether no filter is set. HospitalID is not a filter: it
+// always comes from the staff member's token.
+func (c PatientSearchCriteria) IsEmpty() bool {
+	return !c.HasPatientID() && c.FirstName == "" && c.MiddleName == "" && c.LastName == "" &&
+		c.DateOfBirth == nil && c.PhoneNumber == "" && c.Email == ""
+}
+
+func (c PatientSearchCriteria) HasPatientID() bool {
+	return c.NationalID != "" || c.PassportID != ""
+}
+
+func (c PatientSearchCriteria) Matches(hp HospitalPatient) bool {
+	p := hp.Patient
+	switch {
+	case c.NationalID != "" && c.NationalID != p.NationalID,
+		c.PassportID != "" && c.PassportID != p.PassportID,
+		!matchesName(c.FirstName, p.FirstNameTH, p.FirstNameEN),
+		!matchesName(c.MiddleName, p.MiddleNameTH, p.MiddleNameEN),
+		!matchesName(c.LastName, p.LastNameTH, p.LastNameEN),
+		c.DateOfBirth != nil && !sameDate(*c.DateOfBirth, p.DateOfBirth),
+		c.PhoneNumber != "" && c.PhoneNumber != hp.PhoneNumber,
+		c.Email != "" && !strings.EqualFold(c.Email, hp.Email):
+		return false
+	}
+	return true
+}
+
+func matchesName(filter, th, en string) bool {
+	return filter == "" || strings.EqualFold(filter, th) || strings.EqualFold(filter, en)
+}
+
+func sameDate(a, b time.Time) bool {
+	ay, am, ad := a.Date()
+	by, bm, bd := b.Date()
+	return ay == by && am == bm && ad == bd
 }

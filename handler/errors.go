@@ -13,10 +13,18 @@ var errorStatus = []struct {
 	err    error
 	status int
 }{
+	{domain.ErrEmptySearchCriteria, http.StatusBadRequest},
 	{domain.ErrHospitalNotFound, http.StatusNotFound},
+	{domain.ErrPatientNotFound, http.StatusNotFound},
 	{domain.ErrNotFound, http.StatusNotFound},
 	{domain.ErrStaffAlreadyExists, http.StatusConflict},
 	{domain.ErrInvalidCredentials, http.StatusUnauthorized},
+	{domain.ErrPatientAmbiguous, http.StatusConflict},
+	{domain.ErrPatientConflict, http.StatusConflict},
+	{domain.ErrPatientAlreadyExists, http.StatusConflict},
+	{domain.ErrHISTimeout, http.StatusGatewayTimeout},
+	{domain.ErrHISUnavailable, http.StatusBadGateway},
+	{domain.ErrHISInvalidResponse, http.StatusBadGateway},
 }
 
 func writeError(c *gin.Context, err error) {

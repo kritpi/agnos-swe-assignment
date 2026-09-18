@@ -44,7 +44,7 @@ func Run() error {
 	h := handler.New(svc)
 
 	r := gin.Default()
-	router.SetUpRouter(r, h, cfg)
+	router.SetUpRouter(r, h, svc, cfg)
 
 	addr := fmt.Sprintf(":%s", cfg.Server.Port)
 	if err := r.Run(addr); err != nil {

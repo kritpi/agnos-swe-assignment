@@ -8,6 +8,7 @@ import (
 type Handler interface {
 	StaffCreate(c *gin.Context)
 	StaffLogin(c *gin.Context)
+	PatientSearch(c *gin.Context)
 }
 
 type handler struct {

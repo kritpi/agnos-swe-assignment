@@ -12,6 +12,11 @@ import (
 // @host         localhost:8080
 // @BasePath     /api/v1
 // @schemes      http
+//
+// @securityDefinitions.apikey  BearerAuth
+// @in                          header
+// @name                        Authorization
+// @description                 Type "Bearer" followed by a space and the access token from /staff/login.
 func main() {
 	if err := server.Run(); err != nil {
 		log.Fatalf("failed to run server: %+v", err)

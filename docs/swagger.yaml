@@ -32,6 +32,56 @@ definitions:
       access_token:
         type: string
     type: object
+  github_com_kritpi_agnos-swe-assignment_handler_dto.PatientResponse:
+    properties:
+      date_of_birth:
+        description: YYYY-MM-DD
+        type: string
+      email:
+        type: string
+      first_name_en:
+        type: string
+      first_name_th:
+        type: string
+      gender:
+        type: string
+      last_name_en:
+        type: string
+      last_name_th:
+        type: string
+      middle_name_en:
+        type: string
+      middle_name_th:
+        type: string
+      national_id:
+        type: string
+      passport_id:
+        type: string
+      patient_hn:
+        type: string
+      phone_number:
+        type: string
+    type: object
+  github_com_kritpi_agnos-swe-assignment_handler_dto.SearchPatientRequest:
+    properties:
+      date_of_birth:
+        description: YYYY-MM-DD
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      middle_name:
+        type: string
+      national_id:
+        type: string
+      passport_id:
+        type: string
+      phone_number:
+        type: string
+    type: object
   github_com_kritpi_agnos-swe-assignment_handler_dto.StaffResponse:
     properties:
       created_at:
@@ -57,6 +107,59 @@ info:
   title: Agnos SWE Assignment API
   version: "1.0"
 paths:
+  /patient/search:
+    post:
+      consumes:
+      - application/json
+      description: |-
+        Finds the one patient registered at the logged-in staff member's hospital that matches the filters. Every filter is optional, but at least one is required; filters are combined with AND.
+        When nothing is stored locally and national_id or passport_id is given, the patient is fetched from the hospital's HIS, replaces the stored record, and is returned if it matches every filter.
+      parameters:
+      - description: Search filters
+        in: body
+        name: body
+        schema:
+          $ref: '#/definitions/github_com_kritpi_agnos-swe-assignment_handler_dto.SearchPatientRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_kritpi_agnos-swe-assignment_handler_dto.PatientResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "504":
+          description: Gateway Timeout
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Search a patient
+      tags:
+      - patient
   /staff/create:
     post:
       consumes:
@@ -132,4 +235,10 @@ paths:
       - staff
 schemes:
 - http
+securityDefinitions:
+  BearerAuth:
+    description: Type "Bearer" followed by a space and the access token from /staff/login.
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

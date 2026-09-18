@@ -14,7 +14,7 @@ import (
 )
 
 // SetUpRouter registers all routes and the Swagger UI on the Gin engine.
-func SetUpRouter(r *gin.Engine, h handler.Handler, cfg *property.Config) {
+func SetUpRouter(r *gin.Engine, h handler.Handler, staff middleware.StaffVerifier, cfg *property.Config) {
 	// Swagger UI at /docs/api
 	r.GET("/docs/api", func(c *gin.Context) {
 		c.Redirect(http.StatusMovedPermanently, "/docs/api/index.html")
@@ -30,16 +30,16 @@ func SetUpRouter(r *gin.Engine, h handler.Handler, cfg *property.Config) {
 	v1 := api.Group("/v1")
 
 	// Staff
-	staff := v1.Group("/staff")
+	staffGroup := v1.Group("/staff")
 	{
-		staff.POST("/create", h.StaffCreate)
-		staff.POST("/login", h.StaffLogin) 
+		staffGroup.POST("/create", h.StaffCreate)
+		staffGroup.POST("/login", h.StaffLogin)
 	}
 
 	// Patient
 	patient := v1.Group("/patient")
-	patient.Use(middleware.RequireStaffLogin(cfg.JWT.Secret))
+	patient.Use(middleware.RequireStaffLogin(cfg.JWT.Secret, staff))
 	{
-		// patient.POST("/search")
+		patient.POST("/search", h.PatientSearch)
 	}
 }
