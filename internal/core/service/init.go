@@ -7,12 +7,15 @@ import (
 // service is the concrete business-logic implementation. The struct and its
 // constructor live here; each operation is a receiver method in its own file.
 type service struct {
-	repo port.Repository
+	repo     port.Repository
+	adapters port.Adapter
 }
 
-// New builds a Service from a Repository.
-func New(repo port.Repository) port.Service {
+// New builds a Service from a Repository and the HIS adapters, keyed by
+// hospital code.
+func New(repo port.Repository, adapters port.Adapter) port.Service {
 	return &service{
-		repo: repo,
+		repo:     repo,
+		adapters: adapters,
 	}
 }

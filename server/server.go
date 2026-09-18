@@ -9,6 +9,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"github.com/kritpi/agnos-swe-assignment/handler"
+	"github.com/kritpi/agnos-swe-assignment/internal/adapter"
 	"github.com/kritpi/agnos-swe-assignment/internal/core/service"
 	"github.com/kritpi/agnos-swe-assignment/property"
 	"github.com/kritpi/agnos-swe-assignment/repository"
@@ -38,7 +39,8 @@ func Run() error {
 	}
 
 	repo := repository.New(pool)
-	svc := service.New(repo)
+	adapters := adapter.New(cfg)
+	svc := service.New(repo, adapters)
 	h := handler.New(svc)
 
 	r := gin.Default()

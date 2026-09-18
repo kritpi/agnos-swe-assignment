@@ -3,6 +3,7 @@ package property
 import (
 	"net"
 	"net/url"
+	"time"
 
 	"github.com/joho/godotenv"
 	"github.com/kelseyhightower/envconfig"
@@ -35,10 +36,19 @@ func (p PostgresConfig) DSN() string {
 	return u.String()
 }
 
+// HISHospitalAConfig holds hospital A's information system settings. Each
+// hospital gets its own struct, because each HIS has its own endpoints. URLs
+// are full endpoint URLs; the adapter only appends the path parameter.
+type HISHospitalAConfig struct {
+	HISHospitalASearchPatientURL string        `envconfig:"HIS_HOSPITAL_A_SEARCH_PATIENT_URL"`
+	HISHospitalATimeout          time.Duration `envconfig:"HIS_HOSPITAL_A_TIMEOUT" default:"10s"`
+}
+
 // Config is the aggregated application configuration.
 type Config struct {
-	Server   ServerConfig
-	Postgres PostgresConfig
+	Server       ServerConfig
+	Postgres     PostgresConfig
+	HISHospitalA HISHospitalAConfig
 }
 
 // Load reads the .env file (if present) and populates Config from the environment.
@@ -50,6 +60,9 @@ func Load() (*Config, error) {
 		return nil, err
 	}
 	if err := envconfig.Process("", &cfg.Postgres); err != nil {
+		return nil, err
+	}
+	if err := envconfig.Process("", &cfg.HISHospitalA); err != nil {
 		return nil, err
 	}
 

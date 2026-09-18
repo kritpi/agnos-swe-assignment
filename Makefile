@@ -8,12 +8,12 @@ swagger:
 	go run github.com/swaggo/swag/cmd/swag@$(SWAG_VERSION) init \
 		-g cmd/server/main.go --parseInternal --parseDependency -o docs
 
-## mocks: regenerate the Repository port mock into internal/core/port/mocks
+## mocks: regenerate the Repository and Adapter port mocks into internal/core/port/mocks
 mocks:
 	go run github.com/vektra/mockery/v2@$(MOCKERY_VERSION) \
-		--dir internal/core/port --name Repository \
-		--output internal/core/port/mocks --outpkg mocks --filename repository.go \
-		--with-expecter --disable-version-string --issue-845-fix
+		--dir internal/core/port --name "Repository|Adapter" \
+		--output internal/core/port/mocks --outpkg mocks --case underscore \
+		--with-expecter --disable-version-string
 
 ## build: compile the API binary
 build:
